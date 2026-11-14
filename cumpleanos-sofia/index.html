@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Cumpleaños Sofia!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="petals-container"></div>
+    
+    <!-- Campo de lirios (pantalla de la carta) -->
+    <div id="field" class="field hidden"></div>
+    
+    <!-- Botones a la carta y al video (aparecen al celebrar, en el cielo a la izquierda) -->
+    <div id="top-btns" class="top-btns hidden">
+        <a href="carta.html" id="card-btn" class="card-btn">🎉 Carta</a>
+        <button id="video-btn" class="card-btn">🎬 Video</button>
+    </div>
+    
+    <!-- Ventana del video -->
+    <div id="video-overlay" class="video-overlay hidden">
+        <div class="video-box">
+            <button id="video-close" class="video-close">✖</button>
+            <video id="birthday-video" src="video.mp4" controls preload="none" playsinline></video>
+        </div>
+    </div>
+    
+    <!-- Fuegos artificiales: toca el cielo de la carta para encender un cohete -->
+    <div id="fx-layer"></div>
+    
+    <!-- Sorpresa final -->
+    <div id="final-overlay" class="final-overlay hidden">
+        <div class="final-fx" id="final-fx"></div>
+        <div class="final-balloons" id="final-balloons"></div>
+        <div class="final-box">
+            <div class="final-18">18</div>
+            <h2>¡Feliz Cumpleaños Sofía!</h2>
+            <p>Que todos tus deseos se cumplan 🎀</p>
+            <button id="final-close" class="final-close">💖 Gracias por estar aquí</button>
+        </div>
+        <button id="music-btn" class="music-btn" title="Silenciar música">🔊</button>
+    </div>
+    
+    <!-- Música de la sorpresa final (Un Año Más - Cumpleaños Feliz) -->
+    <audio id="mananitas-audio" src="Un Año Más  Cumpleaños Feliz.mp3" preload="auto" loop></audio>
+    
+    <!-- Pantalla 1: Hello Kitty -->
+    <div id="welcome-screen" class="screen">
+        <div class="hello-kitty-scene">
+            <div class="thought-bubble hidden-bubble">
+                <div class="thought-text">
+                    <p id="welcome-text"></p>
+                </div>
+                <div class="thought-tail"></div>
+            </div>
+            
+            <img src="images/hello-kitty-hola.png" alt="Hello Kitty saludando" class="kitty-img" id="kitty">
+            
+            <div class="welcome-message">
+                <p class="welcome-greeting" id="second-line"></p>
+                <button id="celebrate-btn" class="celebrate-btn hidden-btn">
+                    💖 ¡Celebrar! 🎉
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pantalla 2: Carta con flores -->
+    <div id="card-screen" class="screen hidden">
+        <div class="card">
+            <div class="flowers-top">
+                <span class="flower">🌸</span>
+                <span class="flower">🌺</span>
+                <span class="flower">🌷</span>
+                <span class="flower">🌹</span>
+                <span class="flower">🌸</span>
+            </div>
+            
+            <div class="message-container">
+                <h1 class="title">¡Feliz Cumpleaños!</h1>
+                <h2 class="subtitle">Sofia Modesti</h2>
+                <p class="date">18 años</p>
+                
+                <div class="divider">
+                    <span class="heart">💕</span>
+                </div>
+                
+                <img src="images/hello-kitty-flores.png" alt="Hello Kitty con flores" class="kitty-card-img">
+                
+                <div class="message">
+                    <p>Hoy, Sofia celebro desde mi corazón que existas y que seas una mujer maravillosa</p>
+                    <p>Que este nuevo año venga lleno de</p>
+                    <p class="highlight">alegría, amor, plata y muchas amistades</p>
+                    <p></p>
+                </div>
+                
+                <div class="wishes">
+                    <a class="wish" href="suenos.html">
+                        <span class="wish-icon">✨</span>
+                        <p>Sueños cumplidos</p>
+                    </a>
+                    <a class="wish" href="dias-soleados.html">
+                        <span class="wish-icon">🌈</span>
+                        <p>Días soleados</p>
+                    </a>
+                    <a class="wish" href="momentos-magicos.html">
+                        <span class="wish-icon">💫</span>
+                        <p>Momentos mágicos</p>
+                    </a>
+                    <a class="wish" href="mucha-felicidad.html">
+                        <span class="wish-icon">🦋</span>
+                        <p>Mucha felicidad</p>
+                    </a>
+                    <a class="wish" href="mucho-estilo.html">
+                        <span class="wish-icon">🎀</span>
+                        <p>Mucho estilo</p>
+                    </a>
+                    <a class="wish" href="torta-con-estrella.html">
+                        <span class="wish-icon">🍰</span>
+                        <p>Torta con estrella</p>
+                    </a>
+                    <a class="wish" href="memoria.html">
+                        <span class="wish-icon">🧩</span>
+                        <p>Juego memoria</p>
+                    </a>
+                    <a class="wish" href="kitty-mascota.html">
+                        <span class="wish-icon">🐱</span>
+                        <p>Mi Hello Kitty</p>
+                    </a>
+                </div>
+                
+                <p class="final-message">
+                    Con cariño, en tu día especial
+                </p>
+                
+                <button id="final-btn" class="final-btn">🎁 Ver tu sorpresa final</button>
+                
+                <div class="flowers-bottom">
+                    <span class="flower">🌷</span>
+                    <span class="flower">🌺</span>
+                    <span class="flower">🌸</span>
+                    <span class="flower">🌹</span>
+                    <span class="flower">🌷</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

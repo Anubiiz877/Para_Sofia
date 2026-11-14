@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌈 Días soleados</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #87ceeb 0%, #bfe9ff 55%, #e8f7e0 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            transition: background 1.2s ease;
+        }
+        body.night {
+            background: linear-gradient(180deg, #070b26 0%, #131a45 55%, #1d2b52 100%);
+        }
+        .header { text-align: center; padding: 6vh 20px; z-index: 2; position: relative; transition: color 1.2s; }
+        .header h1 { font-size: 3em; color: #e65100; text-shadow: 2px 2px 0 #ffe082; transition: color 1.2s, text-shadow 1.2s; }
+        .header p { margin-top: 12px; font-size: 1.3em; color: #5d4037; transition: color 1.2s; }
+        body.night .header h1 {
+            color: #fff;
+            text-shadow: 0 0 18px #ffd6e8, 0 0 45px rgba(255, 214, 232, 0.6);
+        }
+        body.night .header p { color: #f3d9ff; }
+        .sun {
+            position: fixed;
+            top: 7vh; right: 12vw;
+            width: 120px; height: 120px;
+            z-index: 3;
+            cursor: pointer;
+            transition: opacity 1s, transform 1s;
+        }
+        body.night .sun {
+            opacity: 0;
+            transform: scale(0.3) rotate(90deg);
+            pointer-events: none;
+        }
+        .sun .core {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fff176, #ffca28 60%, #f57f17);
+            box-shadow: 0 0 70px 25px rgba(255, 214, 0, 0.55);
+            animation: sun-pulse 3s ease-in-out infinite;
+        }
+        @keyframes sun-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+        .sun .rays {
+            position: absolute; inset: -30px;
+            border-radius: 50%;
+            background: repeating-conic-gradient(rgba(255, 214, 0, 0) 0deg 12deg, rgba(255, 214, 0, 0.55) 12deg 15deg);
+            animation: spin 22s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .moon {
+            position: fixed;
+            top: 6vh; right: 11vw;
+            width: 130px; height: 130px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #fffbe6, #ffe9a8 62%, #f7cf6a);
+            box-shadow: 0 0 70px 30px rgba(255, 240, 180, 0.4), inset -22px -16px 0 rgba(0, 0, 0, 0.07);
+            opacity: 0;
+            transform: scale(0.4);
+            transition: opacity 1s, transform 1s;
+            cursor: pointer;
+            pointer-events: none;
+            z-index: 3;
+            animation: moon-glow 4s ease-in-out infinite;
+        }
+        .moon::after {
+            content: '';
+            position: absolute;
+            top: 12px; right: 4px;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.09) 60%, transparent 65%);
+        }
+        @keyframes moon-glow {
+            0%, 100% { box-shadow: 0 0 55px 22px rgba(255, 240, 180, 0.35), inset -22px -16px 0 rgba(0, 0, 0, 0.07); }
+            50% { box-shadow: 0 0 85px 38px rgba(255, 240, 180, 0.5), inset -22px -16px 0 rgba(0, 0, 0, 0.07); }
+        }
+        body.night .moon {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        .star-night {
+            position: fixed;
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            transition: opacity 1.6s;
+            pointer-events: none;
+            z-index: 1;
+            animation: night-twinkle 3.2s ease-in-out infinite;
+        }
+        body.night .star-night { opacity: 1; }
+        @keyframes night-twinkle {
+            0%, 100% { transform: scale(0.7); filter: brightness(0.7); }
+            50% { transform: scale(1.25); filter: brightness(1.5); }
+        }
+        .rainbow {
+            position: relative;
+            width: 620px; height: 310px;
+            margin-top: 30px;
+            z-index: 2;
+            transition: opacity 1.2s, filter 1.2s;
+        }
+        body.night .rainbow { opacity: 0.18; filter: saturate(0.5) brightness(0.7); }
+        .band {
+            position: absolute;
+            border-radius: 50% 50% 0 0;
+            border: 16px solid var(--c);
+            border-bottom: none;
+            transform: scaleY(1);
+            transform-origin: bottom center;
+            opacity: 0;
+            animation: arc-in 1s ease-out forwards;
+        }
+        .band:nth-child(1) { inset: 0; animation-delay: 0.1s; }
+        .band:nth-child(2) { inset: 14px; animation-delay: 0.25s; }
+        .band:nth-child(3) { inset: 28px; animation-delay: 0.4s; }
+        .band:nth-child(4) { inset: 42px; animation-delay: 0.55s; }
+        .band:nth-child(5) { inset: 56px; animation-delay: 0.7s; }
+        .band:nth-child(6) { inset: 70px; animation-delay: 0.85s; }
+        .band:nth-child(7) { inset: 84px; animation-delay: 1s; }
+        @keyframes arc-in {
+            0% { opacity: 0; transform: scaleY(0.2) translateY(30px); }
+            70% { opacity: 1; }
+            100% { opacity: 1; transform: scaleY(1) translateY(0); }
+        }
+        .field {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 30vh;
+            z-index: 1;
+        }
+        .cloud {
+            position: fixed;
+            background: #fff;
+            border-radius: 40px;
+            opacity: 0.85;
+            animation: drift 30s linear infinite;
+            z-index: 1;
+            transition: background 1.2s, opacity 1.2s;
+        }
+        body.night .cloud { background: #909ec9; opacity: 0.45; }
+        @keyframes drift { from { transform: translateX(-20vw); } to { transform: translateX(110vw); } }
+        .back {
+            margin: 30px auto 30px;
+            background: rgba(255, 255, 255, 0.85);
+            color: #e65100;
+            border: 1px solid rgba(230, 81, 0, 0.3);
+            padding: 14px 32px;
+            font-size: 1em;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s, color 1.2s, border-color 1.2s;
+            z-index: 2;
+            position: relative;
+        }
+        body.night .back {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+        .back:hover { background: #fff; transform: translateY(-2px); }
+        body.night .back:hover { background: rgba(255, 255, 255, 0.25); }
+        .kitty-guest {
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            width: 96px;
+            z-index: 20;
+            pointer-events: none;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.2));
+            animation: kitty-float 3.2s ease-in-out infinite;
+        }
+        @keyframes kitty-float {
+            0%, 100% { transform: translateY(0) rotate(-4deg); }
+            50% { transform: translateY(-9px) rotate(4deg); }
+        }
+    </style>
+</head>
+<body>
+    <img src="images/hello-kitty-hola.png" alt="Hello Kitty saludando" class="kitty-guest">
+    <div class="sun"><div class="rays"></div><div class="core"></div></div>
+    <div class="moon"></div>
+    <div class="rainbow">
+        <div class="band" style="--c:#ff1744"></div>
+        <div class="band" style="--c:#ff9100"></div>
+        <div class="band" style="--c:#ffd600"></div>
+        <div class="band" style="--c:#00e676"></div>
+        <div class="band" style="--c:#00b0ff"></div>
+        <div class="band" style="--c:#3d5afe"></div>
+        <div class="band" style="--c:#aa00ff"></div>
+    </div>
+    <header class="header">
+        <h1>🌈 Días soleados</h1>
+        <p>Eres la prueba perfecta de que después de la tormenta más dura, la vida siempre se reserva el talento de pintar nuestro cielo de colores inquebrantables
+            </p>
+    </header>
+    <a class="back" href="index.html?vista=carta">⬅ Volver a la sorpresa</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            for (let i = 0; i < 4; i++) {
+                const c = document.createElement('div');
+                c.className = 'cloud';
+                c.style.width = (80 + Math.random() * 60) + 'px';
+                c.style.height = (30 + Math.random() * 18) + 'px';
+                c.style.top = (Math.random() * 30) + 'vh';
+                c.style.animationDuration = (25 + Math.random() * 25) + 's';
+                c.style.animationDelay = (Math.random() * 20) + 's';
+                document.body.appendChild(c);
+            }
+
+            // Cielo estrellado (visible de noche)
+            for (let i = 0; i < 70; i++) {
+                const s = document.createElement('div');
+                s.className = 'star-night';
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.top = Math.random() * 100 + 'vh';
+                const size = 2 + Math.random() * 4;
+                s.style.width = size + 'px';
+                s.style.height = size + 'px';
+                s.style.animationDelay = (Math.random() * 3) + 's';
+                s.style.animationDuration = (2.2 + Math.random() * 2.5) + 's';
+                document.body.appendChild(s);
+            }
+
+            // Día / noche
+            const sun = document.querySelector('.sun');
+            const moon = document.querySelector('.moon');
+            sun.addEventListener('click', function() {
+                document.body.classList.add('night');
+            });
+            moon.addEventListener('click', function() {
+                document.body.classList.remove('night');
+            });
+        });
+    </script>
+</body>
+</html>

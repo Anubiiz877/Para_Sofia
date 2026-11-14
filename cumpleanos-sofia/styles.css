@@ -1,0 +1,1123 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ffeaa7 100%);
+    min-height: 100vh;
+    display: flex;
+    padding: 0;
+}
+
+#petals-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2000;
+}
+
+.petal {
+    position: absolute;
+    font-size: 20px;
+    animation: petal-fall 4s linear forwards;
+    opacity: 0.8;
+}
+
+@keyframes petal-fall {
+    0% {
+        transform: translateY(-50px) rotate(0deg) translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg) translateX(100px);
+        opacity: 0;
+    }
+}
+
+.screen {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    margin: auto;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ===== CAMPO DE LIRIOS ===== */
+
+.top-btns {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    display: flex;
+    gap: 12px;
+}
+
+.card-btn {
+    background: rgba(255, 255, 255, 0.9);
+    color: #ad1457;
+    text-decoration: none;
+    cursor: pointer;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 14px 26px;
+    border-radius: 50px;
+    border: 2px solid rgba(233, 30, 99, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    animation: btn-pulse 2s infinite;
+}
+
+.card-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    background: #ffffff;
+    box-shadow: 0 12px 35px rgba(233, 30, 99, 0.35);
+}
+
+.video-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.video-box {
+    position: relative;
+    width: min(860px, 92vw);
+    max-height: 85vh;
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.video-box video {
+    width: 100%;
+    max-height: 85vh;
+    display: block;
+}
+
+.video-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 5;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.85);
+    color: #ad1457;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 500px) {
+    .top-btns {
+        top: 12px;
+        left: 12px;
+        gap: 8px;
+    }
+    
+    .card-btn {
+        padding: 10px 18px;
+        font-size: 0.95em;
+    }
+}
+
+.field {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(180deg, #aee3ff 0%, #d9f4ff 35%, #7ecb5e 35.1%, #5da94b 70%, #46853a 100%);
+    animation: fadeIn 0.8s ease-out;
+    overflow: hidden;
+    transition: background 1.2s ease;
+}
+
+.field.night {
+    background: linear-gradient(180deg, #070b26 0%, #131a45 35%, #1c2b26 35.1%, #243f1f 70%, #1a3017 100%);
+}
+
+.sun-el {
+    position: absolute;
+    top: 4%;
+    right: 8%;
+    width: 90px;
+    height: 90px;
+    background: radial-gradient(circle, #fff9c4 0%, #ffe082 60%, transparent 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 40px 20px rgba(255, 224, 130, 0.4);
+    animation: sun-glow 4s ease-in-out infinite;
+    cursor: pointer;
+    z-index: 5;
+    transition: opacity 1s, transform 1s;
+}
+
+.field.night .sun-el {
+    opacity: 0;
+    transform: scale(0.3);
+    pointer-events: none;
+}
+
+@keyframes sun-glow {
+    0%, 100% { opacity: 0.9; }
+    50% { opacity: 1; }
+}
+
+.moon-el {
+    position: absolute;
+    top: 3%;
+    right: 7%;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fffbe6, #ffe9a8 62%, #f7cf6a);
+    box-shadow: 0 0 55px 22px rgba(255, 240, 180, 0.4), inset -16px -12px 0 rgba(0, 0, 0, 0.07);
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 1s, transform 1s;
+    cursor: pointer;
+    pointer-events: none;
+    z-index: 5;
+    animation: moon-glow-night 4s ease-in-out infinite;
+}
+
+.field.night .moon-el {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+@keyframes moon-glow-night {
+    0%, 100% { box-shadow: 0 0 55px 22px rgba(255, 240, 180, 0.35), inset -16px -12px 0 rgba(0, 0, 0, 0.07); }
+    50% { box-shadow: 0 0 85px 38px rgba(255, 240, 180, 0.5), inset -16px -12px 0 rgba(0, 0, 0, 0.07); }
+}
+
+.star-el {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    transition: opacity 1.6s;
+    pointer-events: none;
+    z-index: 1;
+    animation: star-twinkle 3.2s ease-in-out infinite;
+}
+
+.field.night .star-el { opacity: 1; }
+
+@keyframes star-twinkle {
+    0%, 100% { transform: scale(0.7); filter: brightness(0.7); }
+    50% { transform: scale(1.25); filter: brightness(1.5); }
+}
+
+/* Lirio individual */
+.lily, .tulip {
+    --s: 1;
+    position: absolute;
+    transform-origin: bottom center;
+    animation: lily-sway 4s ease-in-out infinite;
+}
+
+.lily:nth-child(even),
+.tulip:nth-child(even) {
+    animation-delay: 1.5s;
+}
+
+@keyframes lily-sway {
+    0%, 100% { transform: scale(var(--s)) rotate(-2deg); }
+    50% { transform: scale(var(--s)) rotate(2.5deg); }
+}
+
+.lily, .tulip { cursor: pointer; }
+
+.lily.popped,
+.tulip.popped {
+    pointer-events: none;
+    animation: popOut 0.55s ease-in forwards;
+}
+
+@keyframes popOut {
+    30% { transform: scale(calc(var(--s) * 1.7)); opacity: 0.9; }
+    100% { transform: scale(var(--s)) scale(0.1); opacity: 0; }
+}
+
+.lily.growing,
+.tulip.growing {
+    animation: growIn 0.5s ease-out, lily-sway 4s ease-in-out infinite 0.5s;
+}
+
+@keyframes growIn {
+    from { transform: scale(calc(var(--s) * 0.4)); opacity: 0; }
+    to { transform: scale(var(--s)); opacity: 1; }
+}
+
+.petal-burst {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border-radius: 50% 0 50% 50%;
+    z-index: 12;
+    pointer-events: none;
+    animation: petalFly 0.95s ease-out forwards;
+}
+
+@keyframes petalFly {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; }
+}
+
+/* Tallo y hojas compartidos por todas las flores */
+.stem {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(180deg, #2e7d32 0%, #1b5e20 100%);
+    border-radius: 3px;
+}
+
+.leaf {
+    position: absolute;
+    width: 22px;
+    height: 60px;
+    background: linear-gradient(200deg, #43a047 0%, #2e7d32 100%);
+    border-radius: 100% 0 100% 0;
+}
+
+.leaf.left {
+    left: 45%;
+    bottom: 35%;
+    transform: rotate(15deg);
+}
+
+.leaf.right {
+    right: 45%;
+    bottom: 20%;
+    transform: rotate(-15deg) scaleX(-1);
+}
+
+/* Corola (base verde donde nacen los pétalos) */
+.bloom {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 76px;
+    height: 76px;
+}
+
+.bloom::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 14px;
+    background: linear-gradient(180deg, #4caf50 0%, #2e7d32 100%);
+    border-radius: 50%;
+}
+
+/* ===== LIRIO ===== */
+.lily-petal {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 32px;
+    height: 62px;
+    background: linear-gradient(180deg, #ffffff 0%, #ffeef5 80%, #ffd6e5 100%);
+    border: 1px solid rgba(255, 182, 206, 0.4);
+    border-radius: 50% 50% 48% 48%;
+    transform-origin: bottom center;
+    box-shadow: 0 2px 6px rgba(255, 182, 206, 0.25);
+}
+
+.lily-petal::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 30px;
+    background: radial-gradient(circle, #ffd54f 0%, rgba(255, 213, 79, 0) 70%);
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+.lily-petal:nth-child(1) { transform: translateX(-50%) rotate(0deg); }
+.lily-petal:nth-child(2) { transform: translateX(-50%) rotate(60deg); }
+.lily-petal:nth-child(3) { transform: translateX(-50%) rotate(120deg); }
+.lily-petal:nth-child(4) { transform: translateX(-50%) rotate(180deg); }
+.lily-petal:nth-child(5) { transform: translateX(-50%) rotate(240deg); }
+.lily-petal:nth-child(6) { transform: translateX(-50%) rotate(300deg); }
+
+/* Estambres */
+.stamen {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    width: 2.5px;
+    height: 46px;
+    background: linear-gradient(180deg, #ffb300 0%, #e6a400 100%);
+    border-radius: 2px;
+    transform-origin: bottom center;
+}
+
+.stamen::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #ff8f00 0%, #ffb300 70%);
+    border-radius: 50%;
+}
+
+.stamen:nth-child(7) { transform: translateX(-50%) rotate(-25deg); }
+.stamen:nth-child(8) { transform: translateX(-50%) rotate(0deg); }
+.stamen:nth-child(9) { transform: translateX(-50%) rotate(25deg); }
+
+/* ===== TULIPÁN ===== */
+.tulip {
+    --tc: #e91e63;
+    --tc-light: #ff5f6d;
+}
+
+.tulip-bloom {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 58px;
+    height: 58px;
+}
+
+.tulip-bloom::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 14px;
+    background: linear-gradient(180deg, #4caf50 0%, #2e7d32 100%);
+    border-radius: 50%;
+}
+
+.tulip-petal {
+    position: absolute;
+    bottom: 0;
+    width: 30px;
+    height: 52px;
+    background: linear-gradient(180deg, var(--tc-light) 0%, var(--tc) 100%);
+    border-radius: 50% 50% 52% 52%;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    transform-origin: bottom center;
+}
+
+.tulip-petal:nth-child(1) {
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg);
+    z-index: 2;
+}
+
+.tulip-petal:nth-child(2) {
+    left: 50%;
+    transform: translateX(-50%) rotate(-16deg);
+    z-index: 1;
+}
+
+.tulip-petal:nth-child(3) {
+    left: 50%;
+    transform: translateX(-50%) rotate(16deg);
+    z-index: 1;
+}
+
+.tulip-petal::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 5px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 50%;
+}
+
+/* ===== PANTALLA 1: HELLO KITTY ===== */
+
+.hello-kitty-scene {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 90vh;
+    justify-content: flex-end;
+    padding-bottom: 40px;
+}
+
+.thought-bubble {
+    background: white;
+    border-radius: 20px;
+    padding: 20px 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    position: relative;
+    max-width: 450px;
+    text-align: center;
+}
+
+.hidden-bubble {
+    display: none;
+}
+
+.visible-bubble {
+    display: block;
+    animation: bubble-in 0.5s ease-out;
+}
+
+@keyframes bubble-in {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.thought-text {
+    font-size: 1.4em;
+    line-height: 1.6;
+    color: #555;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.thought-text strong {
+    color: #e91e63;
+}
+
+.thought-tail {
+    width: 20px;
+    height: 20px;
+    background: white;
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Hello Kitty - imagen real */
+.kitty-img {
+    width: 260px;
+    height: auto;
+    transform-origin: bottom center;
+    animation: kitty-enter 1s ease-out;
+    filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes kitty-enter {
+    from {
+        opacity: 0;
+        transform: translateY(100px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.kitty-img.bounce {
+    animation: kitty-bounce 0.3s ease-in-out;
+}
+
+@keyframes kitty-bounce {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-15px) scale(1.05); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+.kitty-img.wiggle {
+    animation: kitty-wiggle 0.5s ease-in-out;
+}
+
+@keyframes kitty-wiggle {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(5deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.kitty-card-img {
+    width: 180px;
+    height: auto;
+    margin: 15px auto;
+    display: block;
+    animation: kitty-enter 1.2s ease-out;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+}
+
+.welcome-message {
+    text-align: center;
+    margin-top: 25px;
+    padding: 20px;
+}
+
+.welcome-greeting {
+    font-size: 1.5em;
+    color: #e91e63;
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== BOTÓN ===== */
+.hidden-btn {
+    display: none;
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-out, btn-pulse 2s infinite 0.8s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.celebrate-btn {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: none;
+    padding: 18px 50px;
+    font-size: 1.3em;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: bold;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: btn-pulse 2s infinite;
+}
+
+@keyframes btn-pulse {
+    0%, 100% { box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4); }
+    50% { box-shadow: 0 8px 40px rgba(245, 87, 108, 0.7); }
+}
+
+.celebrate-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 35px rgba(245, 87, 108, 0.5);
+}
+
+.celebrate-btn:active {
+    transform: translateY(0) scale(0.95);
+}
+
+/* ===== PANTALLA 2: CARTA ===== */
+
+.card {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.flowers-top, .flowers-bottom {
+    padding: 20px;
+    text-align: center;
+    background: linear-gradient(180deg, #fff5f5 0%, #ffffff 100%);
+}
+
+.flowers-bottom {
+    background: transparent;
+    padding-top: 0;
+}
+
+.flower {
+    font-size: 2em;
+    margin: 0 5px;
+    display: inline-block;
+    animation: flower-bounce 2s ease-in-out infinite;
+}
+
+.flower:nth-child(2) { animation-delay: 0.2s; }
+.flower:nth-child(3) { animation-delay: 0.4s; }
+.flower:nth-child(4) { animation-delay: 0.6s; }
+.flower:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes flower-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.message-container {
+    padding: 20px 40px 40px;
+    text-align: center;
+}
+
+.title {
+    font-size: 2.8em;
+    color: #e91e63;
+    text-shadow: 2px 2px 4px rgba(233, 30, 99, 0.2);
+    margin-bottom: 10px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+.subtitle {
+    font-size: 2em;
+    color: #9c27b0;
+    margin-bottom: 5px;
+    font-weight: normal;
+}
+
+.date {
+    color: #ff9800;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.divider {
+    margin: 20px 0;
+}
+
+.heart {
+    font-size: 1.5em;
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.1); }
+}
+
+.message {
+    margin: 25px 0;
+    line-height: 2;
+    color: #555;
+    font-size: 1.1em;
+    min-height: 150px;
+}
+
+.message p {
+    margin: 5px 0;
+    transition: opacity 0.4s ease;
+}
+
+.message .highlight {
+    color: #e91e63;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.wishes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.wish {
+    background: linear-gradient(135deg, #fff5f8 0%, #ffeef2 100%);
+    padding: 20px 15px;
+    border-radius: 15px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid rgba(233, 30, 99, 0.1);
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+}
+
+.wish:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(233, 30, 99, 0.15);
+}
+
+.wish-icon {
+    font-size: 2em;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.wish p {
+    color: #666;
+    font-size: 0.95em;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.final-message {
+    color: #9c27b0;
+    font-size: 1.1em;
+    margin: 25px 0 15px;
+    font-style: italic;
+}
+
+@media (max-width: 500px) {
+    .title {
+        font-size: 2em;
+    }
+    
+    .subtitle {
+        font-size: 1.5em;
+    }
+    
+    .wishes {
+        grid-template-columns: 1fr;
+    }
+    
+    .message-container {
+        padding: 20px 20px 30px;
+    }
+    
+    .flower {
+        font-size: 1.5em;
+    }
+    
+    .kitty-img {
+        width: 200px;
+    }
+    
+    .kitty-card-img {
+        width: 140px;
+    }
+}
+
+/* ================= FUEGOS ARTIFICIALES ================= */
+#fx-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 15;
+    overflow: hidden;
+}
+
+.rocket {
+    position: absolute;
+    bottom: 0;
+    left: var(--x);
+    width: 6px;
+    height: 26px;
+    background: linear-gradient(180deg, #fff, #ffd54f);
+    border-radius: 4px;
+    opacity: 0;
+    animation: rocket-rise var(--dur) ease-in forwards;
+}
+
+@keyframes rocket-rise {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(var(--dy)); }
+}
+
+.spark {
+    position: absolute;
+    left: var(--x0);
+    top: var(--y0);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--c);
+    box-shadow: 0 0 12px 4px var(--c);
+    opacity: 0;
+    animation: spark-fly var(--dur2) cubic-bezier(0.16, 0.7, 0.4, 1) forwards;
+}
+
+@keyframes spark-fly {
+    0% { opacity: 1; transform: translate(0, 0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.25); }
+}
+
+.boom-flash {
+    position: absolute;
+    left: var(--x0);
+    top: var(--y0);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff 0%, var(--c, #fff) 45%, transparent 75%);
+    box-shadow: 0 0 30px 14px var(--c, #fff);
+    opacity: 0;
+    animation: boom-flash-anim 0.5s ease-out forwards;
+}
+
+@keyframes boom-flash-anim {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(0.4); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(2.2); }
+}
+
+.sky-wish {
+    position: fixed;
+    left: 50%;
+    top: 24%;
+    transform: translate(-50%, -50%);
+    font-family: 'Segoe UI', sans-serif;
+    font-size: clamp(1.5em, 5vw, 2.4em);
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 0 18px #ffd700, 0 0 45px rgba(255, 120, 200, 0.85);
+    pointer-events: none;
+    z-index: 16;
+    animation: sky-wish-float 5s ease-out forwards;
+}
+
+@keyframes sky-wish-float {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+    14% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+    24% { transform: translate(-50%, -50%) scale(1); }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -70%) scale(1.02); }
+}
+
+/* ================= SORPRESA FINAL ================= */
+.final-btn {
+    display: inline-block;
+    margin: 14px auto 6px;
+    background: linear-gradient(135deg, #ff8fab, #e91e63);
+    color: #fff;
+    border: none;
+    padding: 16px 34px;
+    font-size: 1.1em;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 12px 30px rgba(233, 30, 99, 0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: btn-pulse 2s infinite;
+}
+
+.final-btn:hover {
+    transform: scale(1.06);
+    box-shadow: 0 16px 40px rgba(233, 30, 99, 0.55);
+}
+
+.final-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: radial-gradient(circle at 50% 35%, #2a1a4e 0%, #0d0a24 78%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+}
+
+.final-overlay.hidden {
+    display: none;
+}
+
+.final-fx, .final-balloons {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.final-fx {
+    pointer-events: none;
+}
+
+.balloon {
+    position: absolute;
+    bottom: -130px;
+    width: 68px;
+    height: 90px;
+    background: radial-gradient(circle at 35% 30%, var(--c2, #fff) 0%, var(--c, #ff6fa5) 70%);
+    border-radius: 50% 50% 48% 48%;
+    box-shadow: inset -10px -12px 0 rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    animation: balloon-rise var(--dur) linear forwards;
+}
+
+.balloon::before {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid var(--c, #ff6fa5);
+}
+
+.balloon::after {
+    content: '';
+    position: absolute;
+    bottom: -68px;
+    left: 50%;
+    width: 2px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.35);
+}
+
+@keyframes balloon-rise {
+    to { transform: translateY(-118vh) rotate(-6deg); }
+}
+
+.balloon-pop {
+    position: absolute;
+    font-size: 18px;
+    color: #fff;
+    pointer-events: none;
+    animation: balloon-pop-anim 0.55s ease-out forwards;
+    z-index: 6;
+}
+
+@keyframes balloon-pop-anim {
+    0% { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(2.4); opacity: 0; }
+}
+
+.final-box {
+    position: relative;
+    z-index: 5;
+    color: #fff;
+    animation: final-in 1s cubic-bezier(0.22, 1.6, 0.36, 1);
+}
+
+@keyframes final-in {
+    from { opacity: 0; transform: scale(0.4); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.final-18 {
+    font-size: clamp(4.5em, 22vw, 10em);
+    line-height: 1;
+    color: #ffd54f;
+    text-shadow: 0 0 40px rgba(255, 213, 79, 0.8), 0 0 90px rgba(255, 213, 79, 0.4);
+    animation: pop18 2s ease-in-out infinite;
+}
+
+@keyframes pop18 {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+}
+
+.final-box h2 {
+    font-size: clamp(1.8em, 7vw, 2.8em);
+    color: #ffd6e8;
+    margin-top: 8px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.final-box p {
+    font-size: clamp(1em, 3.5vw, 1.35em);
+    color: #e7d5ff;
+    margin-top: 10px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.final-close {
+    margin-top: 22px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #ad1457;
+    border: none;
+    padding: 14px 34px;
+    font-size: 1.05em;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.final-close:hover {
+    transform: scale(1.06);
+}
+
+.music-btn {
+    position: fixed;
+    bottom: 22px;
+    left: 22px;
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border: 1px solid rgba(255, 215, 0, 0.6);
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    font-size: 1.3em;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.music-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+}
+
+.confetti-g {
+    position: absolute;
+    top: -14px;
+    left: var(--cl);
+    width: 10px;
+    height: 10px;
+    z-index: 4;
+    animation: confetti-g-fall var(--du) linear forwards;
+}
+
+@keyframes confetti-g-fall {
+    to { transform: translateY(112vh) rotate(720deg); opacity: 0.4; }
+}
+
+

@@ -1,0 +1,269 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: linear-gradient(135deg, #aee3ff 0%, #d9f4ff 40%, #fce4ec 100%);
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+}
+
+.scene {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 15px;
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+.hint {
+    font-size: 1.1em;
+    color: #ad1457;
+    margin-bottom: 40px;
+    text-align: center;
+    animation: hint-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hint-pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+/* ===== SOBRE ===== */
+.envelope {
+    position: relative;
+    width: 420px;
+    max-width: 92vw;
+    height: 260px;
+    cursor: pointer;
+    perspective: 1000px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.envelope__back {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #f48fb1 0%, #ec407a 100%);
+    border-radius: 12px;
+    box-shadow: 0 20px 45px rgba(236, 64, 122, 0.4);
+    z-index: 1;
+}
+
+/* Carta dentro del sobre (oculta hasta abrir) */
+.envelope__letter {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%) translateY(0) scale(0.9);
+    width: 88%;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.envelope__letter.reveal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(560px, 94vw);
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 1;
+    z-index: 100;
+    transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+    pointer-events: auto;
+}
+
+.letter-paper {
+    background: #ffffff;
+    border: 1px solid rgba(233, 30, 99, 0.15);
+    border-radius: 10px;
+    padding: 30px 34px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
+    max-height: 76vh;
+    overflow-y: auto;
+}
+
+.letter-header {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #e91e63;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.letter-heart {
+    margin-right: 6px;
+}
+
+.letter-text {
+    color: #333333;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    font-size: 1.02em;
+    line-height: 1.75;
+    margin: 13px 0;
+    text-align: justify;
+}
+
+.letter-ps {
+    margin-top: 20px;
+    color: #7b1fa2;
+    font-style: italic;
+    font-size: 0.98em;
+    text-align: right;
+}
+
+/* Piezas del sobre (triángulos frontales) */
+.envelope__left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-bottom: 145px solid #e91e63;
+    border-left: 210px solid #e91e63;
+    border-right: 210px solid transparent;
+    z-index: 3;
+}
+
+.envelope__right {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-bottom: 145px solid #d81b60;
+    border-right: 210px solid #d81b60;
+    border-left: 210px solid transparent;
+    z-index: 3;
+}
+
+.envelope__bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-bottom: 122px solid #c2185b;
+    border-left: 210px solid transparent;
+    border-right: 210px solid transparent;
+    z-index: 4;
+}
+
+.envelope__flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-top: 130px solid #f06292;
+    border-left: 210px solid transparent;
+    border-right: 210px solid transparent;
+    z-index: 5;
+    transform-origin: top center;
+    transition: transform 0.6s ease-in-out;
+}
+
+.envelope__seal {
+    position: absolute;
+    top: 112px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 44px;
+    background: radial-gradient(circle, #fff 0%, #f8bbd0 60%, #ec407a 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 6;
+    transition: transform 0.3s ease, opacity 0.4s ease;
+}
+
+.envelope:hover .envelope__seal {
+    transform: translateX(-50%) scale(1.15);
+}
+
+/* ===== SOBRE ABIERTO ===== */
+.envelope.open .envelope__flap {
+    transform: rotateX(160deg);
+}
+
+.envelope.open .envelope__seal {
+    opacity: 0;
+    transform: translateX(-50%) scale(0);
+}
+
+.envelope.open .envelope__letter.reveal {
+    opacity: 1;
+}
+
+/* Overlay + sobre atenuado cuando la carta se despliega */
+.scene.revealed::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 90;
+}
+
+.scene.revealed .envelope {
+    opacity: 0.1;
+    transform: scale(0.9);
+    pointer-events: none;
+}
+
+.back-btn {
+    margin-top: 60px;
+    background: rgba(233, 30, 99, 0.12);
+    color: #ad1457;
+    border: 1px solid rgba(233, 30, 99, 0.3);
+    padding: 14px 32px;
+    font-size: 1em;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Segoe UI', sans-serif;
+    transition: background 0.3s, transform 0.2s;
+    visibility: hidden;
+    position: relative;
+    z-index: 5;
+    box-shadow: 0 8px 20px rgba(233, 30, 99, 0.15);
+}
+
+.scene.revealed .back-btn {
+    visibility: visible;
+    z-index: 101;
+    position: relative;
+}
+
+.back-btn:hover {
+    background: rgba(233, 30, 99, 0.2);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 500px) {
+    .letter-paper {
+        padding: 20px;
+    }
+
+    .letter-header {
+        font-size: 1.25em;
+    }
+
+    .letter-text {
+        font-size: 0.96em;
+    }
+
+    .hint {
+        font-size: 0.95em;
+    }
+}

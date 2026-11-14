@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐱 Mi Hello Kitty</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #ffe0ec 0%, #ffb3d1 45%, #ff8fc0 45.1%, #c06bc4 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .header { text-align: center; padding: 5vh 20px 10px; z-index: 6; position: relative; }
+        .header h1 { font-size: 2.8em; color: #ad1457; text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.7); }
+        .header p { margin-top: 10px; font-size: 1.2em; color: #880e4f; }
+        .happiness {
+            margin-top: 12px;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.85);
+            color: #ad1457;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 1.05em;
+            box-shadow: 0 6px 20px rgba(173, 20, 87, 0.2);
+        }
+        .stage {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4;
+        }
+        .kitty-wrap {
+            position: relative;
+            cursor: pointer;
+            animation: breathe 3.5s ease-in-out infinite;
+        }
+        @keyframes breathe {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-6px) scale(1.03); }
+        }
+        .pet-kitty {
+            width: 200px;
+            filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.25));
+            transition: transform 0.2s;
+        }
+        .kitty-wrap:active .pet-kitty { transform: scale(0.96); }
+        .kitty-wrap.happy { animation: happy-bounce 0.7s ease-in-out; }
+        @keyframes happy-bounce {
+            0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+            30% { transform: translateY(-26px) scale(1.06) rotate(4deg); }
+            60% { transform: translateY(0) scale(0.96) rotate(-3deg); }
+        }
+        .kitty-wrap.dance { animation: dance-move 0.5s ease-in-out infinite; }
+        @keyframes dance-move {
+            0%, 100% { transform: translateY(0) rotate(-7deg) scale(1.04); }
+            50% { transform: translateY(-14px) rotate(7deg) scale(1.04); }
+        }
+        .kitty-wrap.exercise { animation: exc-jump 0.45s ease-in-out infinite; }
+        @keyframes exc-jump {
+            0%, 100% { transform: translateY(0) scale(1, 1) rotate(0deg); }
+            35% { transform: translateY(-22px) scale(1.05, 0.95) rotate(-4deg); }
+            70% { transform: translateY(0) scale(0.94, 1.06) rotate(3deg); }
+        }
+        .dumbbell {
+            position: fixed;
+            font-size: 2.2em;
+            pointer-events: none;
+            z-index: 30;
+            animation: dbl-up 1.6s ease-out forwards;
+        }
+        @keyframes dbl-up {
+            0% { transform: translate(-20px, 0) rotate(-20deg) scale(0.3); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(30px, -170px) rotate(25deg) scale(1.3); opacity: 0; }
+        }
+        .kitty-wrap.eat { animation: eat-chew 0.3s ease-in-out infinite; }
+        @keyframes eat-chew {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06, 0.94); }
+        }
+        .kitty-wrap.sleeping {
+            animation: none;
+            transform: rotate(-8deg) scale(0.98);
+            filter: brightness(0.82) saturate(0.7);
+            transition: all 0.6s;
+        }
+        .bubble {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%) scale(0.6);
+            transform-origin: bottom center;
+            background: #fff;
+            color: #ad1457;
+            padding: 12px 18px;
+            border-radius: 20px;
+            width: 230px;
+            text-align: center;
+            font-size: 1.02em;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(173, 20, 87, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s, transform 0.25s;
+            z-index: 7;
+        }
+        .bubble .tail {
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 14px solid #fff;
+        }
+        .bubble.show { opacity: 1; transform: translateX(-50%) scale(1); }
+        .hearts {
+            position: fixed;
+            font-size: 1.5em;
+            pointer-events: none;
+            z-index: 30;
+            animation: heart-fly 1.1s ease-out forwards;
+        }
+        @keyframes heart-fly {
+            0% { opacity: 0; transform: translate(0, 0) scale(0.5); }
+            20% { opacity: 1; transform: translate(var(--dx), var(--dy)) scale(1.15); }
+            100% { opacity: 0; transform: translate(calc(var(--dx) * 1.7), calc(var(--dy) - 60px)) scale(0.5); }
+        }
+        .note {
+            position: fixed;
+            font-size: 2em;
+            pointer-events: none;
+            z-index: 30;
+            animation: note-up 1.8s ease-out forwards;
+        }
+        @keyframes note-up {
+            0% { transform: translate(0, 0) rotate(0) scale(0.4); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(30px, -160px) rotate(20deg) scale(1.2); opacity: 0; }
+        }
+        .food {
+            position: fixed;
+            font-size: 3.4em;
+            pointer-events: none;
+            z-index: 20;
+            animation: food-drop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes food-drop {
+            0% { transform: translate(-50%, -40px) scale(0.2); opacity: 0; }
+            100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+        }
+        .ball {
+            position: fixed;
+            width: 46px; height: 46px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #ffb0c8, #ff5c8a 70%);
+            box-shadow: 0 14px 20px rgba(173, 20, 87, 0.35), inset -8px -10px 0 rgba(255, 255, 255, 0.25);
+            z-index: 20;
+            cursor: pointer;
+            animation: ball-bounce 1.2s ease-in-out infinite;
+        }
+        @keyframes ball-bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            45% { transform: translateY(-190px) rotate(180deg) scaleX(0.92); }
+            55% { transform: translateY(-190px) rotate(180deg) scaleX(1); }
+            85% { transform: translateY(0) rotate(360deg) scaleX(1.05); }
+        }
+        .zzz {
+            position: fixed;
+            font-size: 1.7em;
+            font-weight: bold;
+            color: #fff;
+            pointer-events: none;
+            z-index: 25;
+            text-shadow: 0 2px 8px rgba(173, 20, 87, 0.5);
+            animation: zzz-drift 2.4s ease-out forwards;
+        }
+        @keyframes zzz-drift {
+            0% { opacity: 0; transform: translate(0, 0) scale(0.5); }
+            20% { opacity: 1; }
+            100% { opacity: 0; transform: translate(30px, -150px) scale(1.3); }
+        }
+        .sleep-layer {
+            position: fixed;
+            inset: 0;
+            background: rgba(18, 14, 50, 0.72);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.7s;
+            z-index: 15;
+        }
+        .sleep-layer.on { opacity: 1; pointer-events: auto; }
+        .actions {
+            position: relative;
+            z-index: 8;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 16px 20px;
+        }
+        .act {
+            background: rgba(255, 255, 255, 0.92);
+            color: #ad1457;
+            border: 1px solid rgba(173, 20, 87, 0.25);
+            padding: 13px 20px;
+            font-size: 1em;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(173, 20, 87, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .act:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 30px rgba(173, 20, 87, 0.3); }
+        .act:active { transform: scale(0.95); }
+        .back {
+            position: relative;
+            z-index: 8;
+            margin-bottom: 22px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #ad1457;
+            border: 1px solid rgba(173, 20, 87, 0.3);
+            padding: 13px 30px;
+            font-size: 1em;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .back:hover { background: #fff; transform: translateY(-2px); }
+        .win {
+            position: fixed;
+            inset: 0;
+            background: rgba(60, 12, 50, 0.78);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+        }
+        .win.on { opacity: 1; pointer-events: auto; }
+        .win .box {
+            background: #fff;
+            border-radius: 28px;
+            padding: 36px 46px;
+            text-align: center;
+            color: #ad1457;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+            max-width: 90vw;
+            animation: pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes pop-in { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .win .box h2 { font-size: 2em; }
+        .win .box p { margin: 12px 0 8px; font-size: 1.15em; color: #880e4f; }
+        .win .box button {
+            margin-top: 14px;
+            background: linear-gradient(135deg, #ff8fab, #e91e63);
+            color: #fff;
+            border: none;
+            padding: 13px 28px;
+            font-size: 1em;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+            transition: transform 0.2s;
+        }
+        .win .box button:hover { transform: scale(1.06); }
+        .confetti-p {
+            position: fixed;
+            width: 12px; height: 12px;
+            z-index: 55;
+            pointer-events: none;
+            animation: fall 3s linear forwards;
+        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0.4; } }
+
+        /* ===== CANTAR: concierto de The Weeknd ===== */
+        .sing {
+            position: fixed;
+            inset: 0;
+            z-index: 45;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 50% 125%, #4a1a6b 0%, #15082b 70%);
+        }
+        .sing.hidden { display: none; }
+        .sing-stage {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            overflow: hidden;
+        }
+        .stage-light {
+            position: absolute;
+            left: 50%;
+            top: -22%;
+            width: 130vh;
+            height: 130vh;
+            transform: translateX(-50%);
+            background: radial-gradient(ellipse, rgba(255, 120, 220, 0.3), rgba(255, 120, 220, 0) 62%);
+            animation: light-pulse 2.4s ease-in-out infinite;
+        }
+        @keyframes light-pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+            50% { transform: translateX(-50%) scale(1.18); opacity: 1; }
+        }
+        .stage-floor {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30%;
+            background: linear-gradient(180deg, #6b2d8b, #3b1a55);
+        }
+        .stage-kitty {
+            position: absolute;
+            bottom: 22%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 4;
+        }
+        .stage-kitty img {
+            width: 150px;
+            filter: drop-shadow(0 0 32px rgba(255, 130, 220, 0.6));
+            animation: sing-bob 0.5s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+        .stage-kitty.singing img { animation: sing-bob-strong 0.22s ease-in-out infinite; }
+        @keyframes sing-bob {
+            0%, 100% { transform: rotate(-3deg) translateY(0); }
+            50% { transform: rotate(3deg) translateY(-8px); }
+        }
+        @keyframes sing-bob-strong {
+            0%, 100% { transform: rotate(-5deg) translateY(0) scale(1); }
+            50% { transform: rotate(5deg) translateY(-12px) scale(1.05); }
+        }
+        .sing-line {
+            position: absolute;
+            left: 50%;
+            bottom: 55%;
+            transform: translateX(-50%);
+            z-index: 6;
+            background: rgba(255, 255, 255, 0.92);
+            color: #ad1457;
+            padding: 12px 22px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+            max-width: 82vw;
+            text-align: center;
+            box-shadow: 0 12px 34px rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .sing-line::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 14px solid rgba(255, 255, 255, 0.92);
+        }
+        .sing-side {
+            padding: 12px 16px 10px;
+            text-align: center;
+        }
+        .sing-side .label { color: #e7d5ff; font-weight: bold; margin-bottom: 8px; font-size: 1.05em; }
+        .song-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+        .song {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 9px 15px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+            transition: transform 0.15s, background 0.2s;
+        }
+        .song:hover { background: #e91e63; transform: scale(1.04); }
+        .song.playing { background: #e91e63; box-shadow: 0 0 16px rgba(233, 30, 99, 0.6); }
+        .sing-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            padding: 4px 12px 18px;
+        }
+        .sing-controls button {
+            background: #fff;
+            color: #ad1457;
+            border: none;
+            padding: 10px 26px;
+            font-size: 1em;
+            font-weight: bold;
+            font-family: 'Segoe UI', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        .sing-controls button:hover { transform: scale(1.05); }
+        .sing-msg {
+            color: #ffd6e8;
+            text-align: center;
+            font-size: 0.92em;
+            margin-top: 8px;
+            min-height: 1.3em;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🐱 Mi Hello Kitty</h1>
+        <p>Cuida a tu mascota: acaríciala, dale de comer, juega y haz ejercicio con ella</p>
+        <div class="happiness">💛 Amistad: <span id="hearts">❤️🤍🤍🤍🤍</span> <span id="happiness-count">0</span>/5</div>
+    </header>
+
+    <div class="stage">
+        <div class="kitty-wrap" id="kitty-wrap">
+            <div class="bubble" id="kitty-bubble">
+                <p id="kitty-text"></p>
+                <div class="tail"></div>
+            </div>
+            <img src="images/hello-kitty-hola.png" alt="Hello Kitty mascota" class="pet-kitty" id="pet-kitty">
+        </div>
+    </div>
+
+    <div class="sleep-layer" id="sleep-layer"></div>
+
+    <div class="actions">
+        <button class="act" data-a="acariciar">🎀 Acariciar</button>
+        <button class="act" data-a="comer">🍰 Dar de comer</button>
+        <button class="act" data-a="jugar">🎾 Jugar</button>
+        <button class="act" data-a="bailar">💃 Bailar</button>
+        <button class="act" data-a="gym">💪 Ejercicio</button>
+        <button class="act" data-a="dormir">💤 Dormir</button>
+        <button class="act" data-a="cantar">🎤 Cantar</button>
+    </div>
+
+    <a class="back" href="index.html?vista=carta">⬅ Volver a la sorpresa</a>
+
+    <div id="sing-overlay" class="sing hidden">
+        <div class="sing-stage">
+            <div class="stage-light"></div>
+            <div class="stage-floor"></div>
+            <div class="stage-kitty" id="stage-kitty">
+                <img src="images/hello-kitty-mic.png" alt="Hello Kitty cantando con micrófono" id="stage-kitty-img">
+            </div>
+            <div class="sing-line" id="sing-line"><span>🎤 Hello Kitty presenta: The Weeknd</span></div>
+        </div>
+        <div class="sing-side">
+            <div class="label">🎶 Escoge una canción de The Weeknd:</div>
+            <div class="song-list" id="song-list"></div>
+            <div class="sing-msg" id="sing-msg">¡Hello Kitty presenta su concierto! 🎤 Escoge una canción 🎶</div>
+        </div>
+        <div class="sing-controls">
+            <button id="sing-close">✖ Cerrar el concierto</button>
+        </div>
+    </div>
+
+    <audio id="weeknd-audio"></audio>
+
+    <div id="win-overlay" class="win">
+        <div class="box">
+            <h2>💖 ¡Nivel máximo de amistad!</h2>
+            <p>Hello Kitty y Sofi son mejores amigas<br>por siempre y para siempre 🎀</p>
+            <button id="win-close">🎀 ¡Qué lindo!</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const kittyWrap = document.getElementById('kitty-wrap');
+            const bubble = document.getElementById('kitty-bubble');
+            const kittyText = document.getElementById('kitty-text');
+            const heartsEl = document.getElementById('hearts');
+            const happinessEl = document.getElementById('happiness-count');
+            const sleepLayer = document.getElementById('sleep-layer');
+            const winOverlay = document.getElementById('win-overlay');
+
+            let mood = 0;
+            let celebrated = false;
+            let asleep = false;
+            let busy = false;
+
+            const PHRASES = {
+                acariciar: ['¡Qué rico! Me encanta que me acaricies 🎀', '¡Miau! Eres mi persona favorita 💕', 'Me siento muy querida 🥰'],
+                jugar: ['¡Atrápala, atrápala! 🎾😄', '¡Uff, qué divertido! 🎾', 'Jugamos otra vez, ¿sí? 🥺'],
+                bailar: ['¡A bailar! 💃✨', 'Mi corazoncito baila de alegría 🎵', '¡Somos las mejores bailarinas! 💖'],
+                gym: ['¡Vamos al gym, Sofi! ¡A entrenar juntas! 💪', 'Uno, dos, tres... ¡qué ritmo! Entrena conmigo 🏋️‍♀️', '¡El ejercicio nos hace fuertes y felices! ✨'],
+                dormir: ['Buenas noches... zzz 💤', 'Mañana seguimos, mi amiga 😴'],
+                despertar: ['¡Buenos días! Me despertaste feliz ✨', '¡Qué lindo despertarse contigo ☀️'],
+                hola: '¡Hola Sofi! Soy tu Hello Kitty 🐱'
+            };
+
+            function say(text) {
+                kittyText.textContent = text;
+                bubble.classList.remove('show');
+                void bubble.offsetWidth;
+                bubble.classList.add('show');
+                clearTimeout(say._t);
+                say._t = setTimeout(() => bubble.classList.remove('show'), 2300);
+            }
+
+            function burstHeartsAt(x, y) {
+                const marks = ['❤️', '💖', '💛', '🎀', '💕', '✨'];
+                for (let i = 0; i < 9; i++) {
+                    const s = document.createElement('span');
+                    const ang = (Math.PI * 2 / 9) * i + Math.random() * 0.7;
+                    const dist = 40 + Math.random() * 45;
+                    s.className = 'hearts';
+                    s.textContent = marks[Math.floor(Math.random() * marks.length)];
+                    s.style.left = x + 'px';
+                    s.style.top = y + 'px';
+                    s.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
+                    s.style.setProperty('--dy', Math.sin(ang) * dist + 'px');
+                    document.body.appendChild(s);
+                    setTimeout(() => s.remove(), 1250);
+                }
+            }
+
+            function burstHearts() {
+                const r = document.getElementById('pet-kitty').getBoundingClientRect();
+                burstHeartsAt(r.left + r.width / 2, r.top + r.height / 2);
+            }
+
+            function addMood(amount) {
+                amount = amount || 1;
+                const before = mood;
+                mood = Math.min(5, mood + amount);
+                happinessEl.textContent = mood;
+                const hearts = ['❤️', '❤️', '❤️', '❤️', '❤️'];
+                heartsEl.innerHTML = hearts.map((h, i) => (i < mood) ? h : '🤍').join('');
+                if (mood === 5 && before < 5 && !celebrated) {
+                    celebrated = true;
+                    confettiRain();
+                    setTimeout(() => winOverlay.classList.add('on'), 600);
+                }
+            }
+
+            function confettiRain() {
+                const colors = ['#ff5c8a', '#ffd54f', '#7c4dff', '#64dd8a', '#ff8a65', '#f06292'];
+                let delay = 0;
+                for (let round = 0; round < 3; round++) {
+                    for (let i = 0; i < 18; i++) {
+                        setTimeout(function() {
+                            const c = document.createElement('div');
+                            c.className = 'confetti-p';
+                            c.style.left = Math.random() * 100 + 'vw';
+                            c.style.top = '-12px';
+                            c.style.background = colors[Math.floor(Math.random() * colors.length)];
+                            c.style.animationDuration = (2.4 + Math.random() * 2) + 's';
+                            if (Math.random() > 0.5) c.style.borderRadius = '50%';
+                            document.body.appendChild(c);
+                            setTimeout(() => c.remove(), 6000);
+                        }, delay + i * 45);
+                    }
+                    delay += 700;
+                }
+            }
+
+            function proxyPhrase(list) {
+                return list[Math.floor(Math.random() * list.length)];
+            }
+
+            function wakeUp(silent) {
+                if (asleep) {
+                    asleep = false;
+                    sleepLayer.classList.remove('on');
+                    kittyWrap.classList.remove('sleeping');
+                    document.querySelectorAll('.zzz').forEach(z => z.remove());
+                }
+                if (!silent) {
+                    say(proxyPhrase(PHRASES.despertar));
+                    addMood();
+                }
+            }
+
+            function goSleep() {
+                if (asleep) return;
+                asleep = true;
+                sleepLayer.classList.add('on');
+                kittyWrap.classList.add('sleeping');
+                say(proxyPhrase(PHRASES.dormir));
+                const r = document.getElementById('pet-kitty').getBoundingClientRect();
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        const z = document.createElement('div');
+                        z.className = 'zzz';
+                        z.textContent = 'Z' + (i ? 'z'.repeat(i + 1) : '');
+                        z.style.left = (r.left + r.width / 2 - 20 + i * 8) + 'px';
+                        z.style.top = (r.top - 20) + 'px';
+                        document.body.appendChild(z);
+                        setTimeout(() => z.remove(), 2600);
+                    }, i * 900);
+                }
+                addMood();
+            }
+
+            const FOODS = [
+                { emoji: '🍰', phrases: ['¡Ñam ñam, el pastel está buenísimo! 🍰', 'Este pastel de fresa es mi favorito 🍰'] },
+                { emoji: '🧁', phrases: ['¡Mmm, qué cupcake más rico! 🧁', '¡Gracias por el cupcake, mmm! 🧁'] },
+                { emoji: '🍩', phrases: ['¡Una dona glaseada, me encanta! 🍩', '¡Qué dona tan sabrosa! 🍩'] },
+                { emoji: '🍎', phrases: ['¡Crocante y fresquita, para mí! 🍎', '¡La manzana está deliciosa! 🍎'] }
+            ];
+
+            function feed() {
+                const item = FOODS[Math.floor(Math.random() * FOODS.length)];
+                const food = document.createElement('div');
+                food.className = 'food';
+                food.textContent = item.emoji;
+                food.style.left = '50%';
+                food.style.bottom = '32%';
+                document.body.appendChild(food);
+                kittyWrap.classList.add('eat');
+                setTimeout(() => {
+                    food.remove();
+                    kittyWrap.classList.remove('eat');
+                }, 1400);
+                say(proxyPhrase(item.phrases));
+                addMood();
+            }
+
+            function playBall() {
+                if (document.querySelector('.ball')) return;
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+                ball.style.left = (15 + Math.random() * 60) + 'vw';
+                ball.style.bottom = '26vh';
+                document.body.appendChild(ball);
+                ball.addEventListener('click', function() { ball.remove(); });
+                setTimeout(() => {
+                    if (ball.parentNode) {
+                        ball.remove();
+                        burstHearts();
+                        say(proxyPhrase(PHRASES.jugar));
+                        addMood();
+                    }
+                }, 2600);
+            }
+
+            function dance() {
+                kittyWrap.classList.add('dance');
+                const r = document.getElementById('pet-kitty').getBoundingClientRect();
+                const cx = r.left + r.width / 2;
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const n = document.createElement('div');
+                        n.className = 'note';
+                        n.textContent = ['🎵', '🎶', '💖'][i % 3];
+                        n.style.left = (cx + (Math.random() * 60 - 30)) + 'px';
+                        n.style.top = (r.top + 10) + 'px';
+                        document.body.appendChild(n);
+                        setTimeout(() => n.remove(), 1900);
+                    }, i * 320);
+                }
+                setTimeout(() => kittyWrap.classList.remove('dance'), 2200);
+                say(proxyPhrase(PHRASES.bailar));
+                addMood();
+            }
+
+            function pet() {
+                kittyWrap.classList.add('happy');
+                setTimeout(() => kittyWrap.classList.remove('happy'), 750);
+                burstHearts();
+                say(proxyPhrase(PHRASES.acariciar));
+                addMood();
+            }
+
+            function gym() {
+                kittyWrap.classList.add('exercise');
+                const r = document.getElementById('pet-kitty').getBoundingClientRect();
+                const cx = r.left + r.width / 2;
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const d = document.createElement('div');
+                        d.className = 'dumbbell';
+                        d.textContent = ['💪', '🏋️‍♀️', '⚡', '⭐'][i % 4];
+                        d.style.left = (cx + (Math.random() * 70 - 35)) + 'px';
+                        d.style.top = (r.top + 24) + 'px';
+                        document.body.appendChild(d);
+                        setTimeout(() => d.remove(), 1700);
+                    }, i * 320);
+                }
+                setTimeout(() => kittyWrap.classList.remove('exercise'), 2400);
+                say(proxyPhrase(PHRASES.gym));
+                addMood();
+            }
+
+            document.getElementById('pet-kitty').addEventListener('click', function() {
+                if (asleep) {
+                    wakeUp(false);
+                    return;
+                }
+                pet();
+            });
+
+            sleepLayer.addEventListener('click', function() {
+                wakeUp(false);
+            });
+
+            document.querySelectorAll('.act').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    if (busy) return;
+                    busy = true;
+                    setTimeout(() => { busy = false; }, 500);
+                    const action = this.dataset.a;
+                    if (asleep && action !== 'dormir') { wakeUp(false); return; }
+                    switch (action) {
+                        case 'acariciar': pet(); break;
+                        case 'comer': feed(); break;
+                        case 'jugar': playBall(); break;
+                        case 'bailar': dance(); break;
+                        case 'gym': gym(); break;
+                        case 'dormir': goSleep(); break;
+                        case 'cantar':
+                            singOverlay.classList.remove('hidden');
+                            break;
+                    }
+                });
+            });
+
+            document.getElementById('win-close').addEventListener('click', function() {
+                winOverlay.classList.remove('on');
+            });
+
+            // ===== CANTAR: concierto de The Weeknd =====
+            const singOverlay = document.getElementById('sing-overlay');
+            const singLine = document.getElementById('sing-line');
+            const singMsg = document.getElementById('sing-msg');
+            const songList = document.getElementById('song-list');
+            const stageKitty = document.getElementById('stage-kitty');
+            const weekndAudio = document.getElementById('weeknd-audio');
+
+            const SONGS = [
+                { t: 'Starry Eyes', f: 'starry-eyes.mp3' },
+                { t: 'How Do I Make You Love Me?', f: 'how-do-i-make-you-love-me.mp3' },
+                { t: 'The Abyss', f: 'the-abyss.mp3' },
+                { t: 'Open Hearts', f: 'open-hearts.mp3' },
+                { t: 'Red Terror', f: 'red-terror.mp3' },
+                { t: 'One of the Girls', f: 'one-of-the-girls.mp3' }
+            ];
+
+            const KARAOKE = {
+    'starry-eyes.mp3': [
+        { t: 1.25, l: "I only met you in my dreams before" },
+        { t: 4.72, l: "When I was young and alone in the world" },
+        { t: 8.52, l: "You were there when I needed someone" },
+        { t: 12.08, l: "To call my girl" },
+        { t: 15.89, l: "And now you're my reality" },
+        { t: 18.60, l: "And I wanna feel you close" },
+        { t: 22.53, l: "But you're defeated, baby" },
+        { t: 24.76, l: "Broken, hurtin', sufferin' from a shattered soul" },
+        { t: 31.36, l: "Ohh, a shattered soul, ohh" },
+        { t: 44.09, l: "Let me be there" },
+        { t: 45.53, l: "Let me be there for your heart" },
+        { t: 51.38, l: "Let me be there" },
+        { t: 52.88, l: "I can be there 'til you're whole" },
+        { t: 58.36, l: "You weren't touched by a man in so long" },
+        { t: 61.93, l: "'Cause the last time it was way too strong" },
+        { t: 65.53, l: "Let me be there" },
+        { t: 67.35, l: "Let me be there for your heart" },
+        { t: 72.77, l: "Let me love you" },
+        { t: 74.05, l: "Let me love you like you need" },
+        { t: 79.79, l: "And I'll make it" },
+        { t: 81.58, l: "Make it my responsibility" },
+        { t: 86.73, l: "I'll be there every step of the way" },
+        { t: 90.86, l: "I'll get you back on your feet" },
+        { t: 93.80, l: "Let me love you" },
+        { t: 95.38, l: "Let me love you like you need" },
+        { t: 100.98, l: "And you can kick me" },
+        { t: 103.01, l: "Kick me to the curb" },
+        { t: 108.17, l: "It's okay baby" },
+        { t: 109.90, l: "I promise that I felt worse" },
+        { t: 115.55, l: "Back then I was starry-eyed" },
+        { t: 119.15, l: "And now I'm so cynical" },
+        { t: 122.35, l: "Baby, break me" },
+        { t: 124.48, l: "Kick me to the curb" },
+        { t: 128.87, l: "Ohh" }
+    ],
+    'how-do-i-make-you-love-me.mp3': [
+        { t: 7.34, l: "We're going back in time" },
+        { t: 9.49, l: "I'd like to see you try" },
+        { t: 11.55, l: "Unpacking thoughts through tunnels in your mind" },
+        { t: 15.39, l: "I'll fix you mushroom tea" },
+        { t: 17.33, l: "And cross the restless sea" },
+        { t: 19.48, l: "Release yourself to escape reality" },
+        { t: 23.33, l: "It doesn't phase you" },
+        { t: 25.48, l: "I need a breakthrough" },
+        { t: 27.35, l: "I only want what's right in front of me" },
+        { t: 31.33, l: "It's quite unusual" },
+        { t: 33.17, l: "Seeking approval" },
+        { t: 35.27, l: "Begging for it desperately" },
+        { t: 38.15, l: "I said" },
+        { t: 55.36, l: "How do I make you love me" },
+        { t: 59.66, l: "How do I make you fall for me" },
+        { t: 63.25, l: "How do I make you want me" },
+        { t: 67.37, l: "And make it last eternally?" },
+        { t: 71.32, l: "How do I make you love me (ohh, ahh)" },
+        { t: 75.39, l: "How do I make you fall for me" },
+        { t: 79.03, l: "How do I make you want me (ohh ahh)" },
+        { t: 83.45, l: "And make it last eternally" },
+        { t: 86.94, l: "I can see the real you, girl" },
+        { t: 89.29, l: "You don't have to hide" },
+        { t: 90.73, l: "Forget 'bout what your daddy said" },
+        { t: 92.83, l: "I'll teach you how to shine" },
+        { t: 94.74, l: "And all the things you tolerated made you cold inside" },
+        { t: 98.60, l: "But I can light you up again like embers of a fire" },
+        { t: 102.88, l: "It doesn't phase you" },
+        { t: 104.67, l: "I need a breakthrough" },
+        { t: 106.62, l: "I only want what's right in front of me" },
+        { t: 110.63, l: "It's quite unusual" },
+        { t: 112.63, l: "Seeking approval" },
+        { t: 114.72, l: "Begging for it desperately" },
+        { t: 117.70, l: "I said" },
+        { t: 118.81, l: "How do I make you love me" },
+        { t: 122.93, l: "How do I make you fall for me" },
+        { t: 126.87, l: "How do I make you want me" },
+        { t: 130.86, l: "And make it last eternally" },
+        { t: 134.63, l: "How do I make you love me (ohh ahh)" },
+        { t: 138.82, l: "How do I make you fall for me" },
+        { t: 142.58, l: "How do I make you want me (ohh ahh)" },
+        { t: 146.79, l: "And make it last eternally" }
+    ],
+    'the-abyss.mp3': [
+        { t: 6.68, l: "I tried my best to not let you go" },
+        { t: 11.53, l: "I don't like the view" },
+        { t: 14.51, l: "From halfway down" },
+        { t: 19.62, l: "Just promise me that it won't be slow" },
+        { t: 25.25, l: "Will I feel the impact of the ground?" },
+        { t: 33.56, l: "I tried to be somethin' that I'd never be" },
+        { t: 40.12, l: "Why waste another precious hour?" },
+        { t: 43.92, l: "Why waste another precious ounce?" },
+        { t: 47.13, l: "I'd rather leave somewhat of a legacy" },
+        { t: 53.81, l: "Familiar, a thought that's so familiar" },
+        { t: 59.77, l: "Let me close my eyes with dignity" },
+        { t: 66.43, l: "Let's end it all, the world's not far behind" },
+        { t: 75.03, l: "So what's the point of stayin'?" },
+        { t: 78.63, l: "It's goin' up in flames, I know" },
+        { t: 84.19, l: "Yes, I know" },
+        { t: 88.15, l: "Oh-oh-oh" },
+        { t: 100.79, l: "Hey-hey" },
+        { t: 106.55, l: "Oh-oh" },
+        { t: 112.19, l: "(Hey)" },
+        { t: 114.57, l: "Just hold my heartbeat close to you" },
+        { t: 119.89, l: "Remember how it always beats for you" },
+        { t: 125.68, l: "I'm fallin' at the speed of light" },
+        { t: 131.51, l: "I'm starin' at your shrinkin' face, don't cry" },
+        { t: 137.23, l: "You know my heart belongs to you" },
+        { t: 142.87, l: "One last time, say that you want me too" },
+        { t: 148.46, l: "The only words that gave me life" },
+        { t: 154.06, l: "Now I'll see you on the other side" },
+        { t: 160.31, l: "Oh-oh, oh-oh, oh-oh" },
+        { t: 165.45, l: "Oh-oh, oh-oh, oh-oh" },
+        { t: 170.92, l: "Oh-oh, oh-oh, oh-oh" },
+        { t: 176.48, l: "Oh-oh, oh-oh, oh-oh" },
+        { t: 186.21, l: "Oh, mama, I'll pray" },
+        { t: 193.06, l: "I'm runnin' away" },
+        { t: 196.48, l: "Oh-oh" },
+        { t: 199.54, l: "Hey-hey (oh, no)" },
+        { t: 203.10, l: "Oh-oh" },
+        { t: 206.25, l: "Hey-hey" },
+        { t: 208.66, l: "Is a threat not a promise? (Mm)" },
+        { t: 211.81, l: "If you're lookin' for rage (mm, oh)" },
+        { t: 219.68, l: "If you're lookin' for ragin'" },
+        { t: 225.37, l: "Quiet for days" },
+        { t: 232.39, l: "Baby, runnin' away" },
+        { t: 236.82, l: "Ay-yeah" },
+        { t: 239.20, l: "Is a threat not a promise?" },
+        { t: 242.53, l: "Is a threat not a promise?" },
+        { t: 246.99, l: "Yeah-yeah" },
+        { t: 250.37, l: "Ah-ha (oh)" },
+        { t: 253.43, l: "Ah-ha (oh)" },
+        { t: 256.73, l: "Ah-ha" },
+        { t: 260.66, l: "Ah-ha" },
+        { t: 262.30, l: "Mama, I'll pray" },
+        { t: 266.01, l: "Mama, I'll pray" }
+    ],
+    'open-hearts.mp3': [
+        { t: 16.12, l: "I can hear the wind blow, even through the window" },
+        { t: 23.76, l: "I can hear the whisper, even with my ears closed" },
+        { t: 31.47, l: "All the silver and gold only made my skin cold" },
+        { t: 37.25, l: "I told myself I would never get old" },
+        { t: 41.56, l: "Then you pulled me in close" },
+        { t: 44.80, l: "Oh, oh, oh, oh" },
+        { t: 46.37, l: "Falling angels call my name" },
+        { t: 52.73, l: "But the things you say" },
+        { t: 56.90, l: "Keeps me alive again" },
+        { t: 60.77, l: "Where do I start when I open my heart?" },
+        { t: 68.35, l: "It's never easy falling in love again" },
+        { t: 76.22, l: "Cover my scars when I open my arms" },
+        { t: 83.90, l: "It's never easy falling in love again" },
+        { t: 90.85, l: "Falling in, falling in love" },
+        { t: 99.51, l: "It's never easy falling in love again" },
+        { t: 106.37, l: "Falling in, falling in love" },
+        { t: 118.81, l: "Falling in love again" },
+        { t: 124.66, l: "Trapped inside a limbo, watching through a window" },
+        { t: 130.58, l: "Of my soul" },
+        { t: 132.50, l: "Suffering, I've been low, then I see your halo" },
+        { t: 137.57, l: "Oh, oh, oh, oh" },
+        { t: 139.10, l: "Falling angels call my name" },
+        { t: 145.43, l: "But the things you say" },
+        { t: 149.01, l: "Keeps me alive for another day" },
+        { t: 153.81, l: "Where do I start when I open my heart?" },
+        { t: 161.48, l: "It's never easy falling in love again" },
+        { t: 169.10, l: "Cover my scars (cover my scars) when I open my arms (open my arms)" },
+        { t: 176.85, l: "It's never easy falling in love again" },
+        { t: 183.65, l: "Falling in, falling in love" },
+        { t: 192.55, l: "It's never easy falling in love again" },
+        { t: 199.35, l: "Falling in, falling in love" },
+        { t: 211.88, l: "Falling in love again" }
+    ],
+    'red-terror.mp3': [
+        { t: 11.78, l: "Oh, whoa" },
+        { t: 13.86, l: "Oh, whoa" },
+        { t: 16.80, l: "Oh, whoa, whoa" },
+        { t: 21.54, l: "Oh, whoa" },
+        { t: 23.95, l: "Oh, whoa" },
+        { t: 26.56, l: "Oh, whoa, whoa" },
+        { t: 30.10, l: "You're not heavy, I rock you to sleep, I hold you for hours long" },
+        { t: 39.99, l: "Never heavy, I won't let you weep" },
+        { t: 45.51, l: "Hush, my child, you're mine" },
+        { t: 54.49, l: "All my life, I've tried" },
+        { t: 65.56, l: "Oh-oh, you were never heavy, light just like a feather" },
+        { t: 71.64, l: "I ran from the terror, the crowd was led from the left" },
+        { t: 76.70, l: "You were never scary, I knew you were special" },
+        { t: 81.59, l: "My only attention, alone, I left to the west" },
+        { t: 86.24, l: "Then moved to the city, eight months we were pregnant" },
+        { t: 90.80, l: "You came out so precious, in the snow you would grow" },
+        { t: 95.87, l: "Your mama loves you, you'll never be alone" },
+        { t: 103.50, l: "Hush, my child, you're mine (I know, I know, I know, hey)" },
+        { t: 113.47, l: "All my life, I've tried (I'm sorry mama, I'm sorry mama, whoa-whoa)" },
+        { t: 122.49, l: "To keep you warm, if I go (if I go, I feel so cold without you mama, I feel so cold without you, whoa-whoa)" },
+        { t: 131.75, l: "You're still my child, don't cry" },
+        { t: 175.60, l: "Death is nothin' at all, it does not count" },
+        { t: 183.41, l: "I have only slipped away into the next room" },
+        { t: 188.79, l: "Nothin' has happened" },
+        { t: 191.81, l: "Everything remains exactly how it was" },
+        { t: 198.13, l: "I am I, and you are you" },
+        { t: 208.00, l: "And the old life that we lived so fondly together is untouched, unchanged" },
+        { t: 219.13, l: "Whatever we were to each other, that we are still" },
+        { t: 228.25, l: "Call me by the old familiar name" }
+    ],
+    'one-of-the-girls.mp3': [
+        { t: 1.23, l: "Lock me up and throw away the key" },
+        { t: 3.68, l: "He knows how to get the best out of me" },
+        { t: 6.41, l: "I'm no fools for the world to see" },
+        { t: 8.86, l: "Trade my whole life just to be" },
+        { t: 23.35, l: "Tell nobody I control you" },
+        { t: 25.56, l: "I broke you just to own you" },
+        { t: 28.42, l: "They can't tell that I love you" },
+        { t: 31.85, l: "'Cause you're loyal, baby" },
+        { t: 33.93, l: "I love when you're submissive" },
+        { t: 36.72, l: "Love it when I break skin" },
+        { t: 39.74, l: "You feel pain without flinchin'" },
+        { t: 42.60, l: "So say it" },
+        { t: 45.00, l: "Give me tough love" },
+        { t: 50.41, l: "Leave me with nothin' when I come down" },
+        { t: 55.82, l: "My kinda love" },
+        { t: 61.33, l: "Push me and choke me 'til I pass out" },
+        { t: 67.09, l: "We don't gotta be in love, no" },
+        { t: 69.98, l: "I don't gotta be the one, no" },
+        { t: 72.47, l: "I just wanna be one of your girls tonight" },
+        { t: 78.05, l: "We don't gotta be in love, no" },
+        { t: 80.90, l: "I don't gotta be the one, no" },
+        { t: 83.73, l: "I just wanna be one of your girls tonight, oh" },
+        { t: 102.44, l: "Push me down, hold me down" },
+        { t: 104.66, l: "Spit in my mouth while you turn me on" },
+        { t: 108.69, l: "I wanna take your light inside" },
+        { t: 113.48, l: "Dim me down, snuff me out" },
+        { t: 115.60, l: "Hands on my neck while you push it out" },
+        { t: 118.79, l: "And I'm screamin' out" },
+        { t: 121.76, l: "Give me tough love" },
+        { t: 127.04, l: "Leave me with nothin' when I come down" },
+        { t: 132.69, l: "My kinda love" },
+        { t: 138.09, l: "Force me and choke me 'til I pass out" },
+        { t: 144.03, l: "We don't gotta be in love, no" },
+        { t: 146.80, l: "I don't gotta be the one, no" },
+        { t: 149.36, l: "I just wanna be one of your girls tonight (tonight)" },
+        { t: 155.09, l: "We don't gotta be in love, no" },
+        { t: 157.87, l: "I don't gotta be the one, no (oh)" },
+        { t: 160.29, l: "I just wanna be one of your girls tonight, oh" },
+        { t: 168.54, l: "Lock me up and throw away the key" },
+        { t: 170.70, l: "He knows how to get the best out of me" },
+        { t: 173.51, l: "I'm no fools for the world to see" },
+        { t: 175.99, l: "Trade my whole life just to be" },
+        { t: 179.11, l: "Top of the world but I'm still not free" },
+        { t: 181.62, l: "It's such a secret that I keep" },
+        { t: 184.30, l: "Until it's gone, I can never find peace" },
+        { t: 187.03, l: "Brace my whole life just to be" },
+        { t: 193.85, l: "We don't gotta be in love, no" },
+        { t: 196.00, l: "I don't gotta be the one, no" },
+        { t: 198.62, l: "I just wanna be one of your girls tonight (tonight)" },
+        { t: 203.92, l: "We don't gotta be in love, no" },
+        { t: 207.05, l: "I don't gotta be the one, no (oh)" },
+        { t: 209.82, l: "I just wanna be one of your girls tonight, oh (oh)" }
+    ],
+};
+
+            const KARAOKE_OFFSETS = {
+                'how-do-i-make-you-love-me.mp3': 0.34
+            };
+
+            let noteTimer = null;
+            let karaokeLines = null;
+            let karaokeIdx = -1;
+            let currentSongKey = null;
+
+            function setSingText(text) {
+                const span = document.createElement('span');
+                span.textContent = text;
+                singLine.textContent = '';
+                singLine.appendChild(span);
+            }
+
+            function startStageNotes() {
+                if (noteTimer) return;
+                noteTimer = setInterval(function() {
+                    const r = stageKitty.getBoundingClientRect();
+                    const n = document.createElement('div');
+                    n.className = 'note';
+                    n.textContent = ['🎵', '🎶', '✨'][Math.floor(Math.random() * 3)];
+                    n.style.left = (r.left + r.width / 2 + (Math.random() * 80 - 40)) + 'px';
+                    n.style.top = (r.top + 10) + 'px';
+                    document.body.appendChild(n);
+                    setTimeout(() => n.remove(), 2000);
+                }, 650);
+            }
+
+            function stopStage() {
+                clearInterval(noteTimer);
+                noteTimer = null;
+                stageKitty.classList.remove('singing');
+                document.querySelectorAll('.note').forEach(n => n.remove());
+            }
+
+            function setActiveSong(i) {
+                document.querySelectorAll('.song').forEach(s => s.classList.remove('playing'));
+                songList.children[i].classList.add('playing');
+            }
+
+            function playSong(i) {
+                const s = SONGS[i];
+                setActiveSong(i);
+                stopStage();
+                karaokeLines = KARAOKE[s.f] || null;
+                karaokeIdx = -1;
+                currentSongKey = s.f;
+                weekndAudio.src = s.f;
+                weekndAudio.currentTime = 0;
+                setSingText(s.t + ' — The Weeknd 🎤✨');
+                singMsg.textContent = '🎧 Reproduciendo: ' + s.t + ' 🎶';
+                const p = weekndAudio.play();
+                if (p) p.catch(function() {
+                    singMsg.textContent = 'No encontré ' + s.f + ' 📀 Colócalo junto a index.html (' + s.t + ')';
+                });
+            }
+
+            weekndAudio.addEventListener('error', function() {
+                singMsg.textContent = 'No encontré el archivo .mp3 📀 Colócalo junto a index.html';
+                stopStage();
+            });
+
+            weekndAudio.addEventListener('timeupdate', function() {
+                if (!karaokeLines) return;
+                const offset = KARAOKE_OFFSETS[currentSongKey] || 0;
+                const t = weekndAudio.currentTime + offset;
+                while (karaokeIdx + 1 < karaokeLines.length && karaokeLines[karaokeIdx + 1].t <= t) {
+                    karaokeIdx++;
+                    setSingText('🎵 ' + karaokeLines[karaokeIdx].l);
+                }
+            });
+
+            weekndAudio.addEventListener('ended', function() {
+                stopStage();
+                singMsg.textContent = '🎤 ¡Terminó la canción! Escoge otra 🎶';
+            });
+
+            weekndAudio.addEventListener('playing', function() {
+                startStageNotes();
+                ritualNote();
+            });
+
+            weekndAudio.addEventListener('pause', function() {
+                stopStage();
+            });
+
+            var ritualDone = false;
+            function ritualNote() {
+                if (ritualDone) return;
+                ritualDone = true;
+                setTimeout(() => singMsg.textContent = '✨ Hello Kitty está cantando para ti, Sofi ✨', 4000);
+            }
+
+            SONGS.forEach(function(s, i) {
+                const b = document.createElement('button');
+                b.className = 'song';
+                b.textContent = '🎵 ' + s.t;
+                b.addEventListener('click', function() { playSong(i); });
+                songList.appendChild(b);
+            });
+
+            document.getElementById('sing-close').addEventListener('click', function() {
+                weekndAudio.pause();
+                stopStage();
+                singOverlay.classList.add('hidden');
+                setSingText('🎤 Hello Kitty presenta: The Weeknd 🎶');
+                document.querySelectorAll('.song').forEach(x => x.classList.remove('playing'));
+            });
+
+            // Saludo inicial
+            setTimeout(() => say(PHRASES.hola), 900);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎀 Mucho estilo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ffe0ec 0%, #ffb3d1 50%, #ff8fc0 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .header { text-align: center; padding: 14vh 20px 30px; z-index: 20; background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(8px); border-radius: 0 0 40px 40px; border-bottom: 2px solid rgba(173, 20, 87, 0.2); box-shadow: 0 10px 30px rgba(173, 20, 87, 0.15); }
+        .header h1 { font-size: 3.2em; color: #ad1457; text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.7); font-style: italic; }
+        .header p { margin-top: 14px; font-size: 1.3em; color: #880e4f; font-family: 'Segoe UI', sans-serif; max-width: 720px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+        .bow {
+            position: fixed;
+            font-size: 3em;
+            z-index: 2;
+            filter: drop-shadow(0 6px 12px rgba(173, 20, 87, 0.35));
+            animation: bow-float 3.5s ease-in-out infinite;
+        }
+        @keyframes bow-float {
+            0%, 100% { transform: translateY(0) rotate(-12deg); }
+            50% { transform: translateY(-20px) rotate(12deg); }
+        }
+        .sparkle {
+            position: fixed;
+            color: #fff;
+            font-size: 1.4em;
+            z-index: 2;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        .heart {
+            position: fixed;
+            left: 50%;
+            bottom: 22vh;
+            font-size: 2.6em;
+            z-index: 3;
+            animation: heartbeat 1.4s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(233, 30, 99, 0.5));
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            25% { transform: translateX(-50%) scale(1.12); }
+            50% { transform: translateX(-50%) scale(1); }
+            75% { transform: translateX(-50%) scale(1.12); }
+        }
+        .back {
+            margin: auto auto 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #ad1457;
+            border: 1px solid rgba(173, 20, 87, 0.3);
+            padding: 14px 32px;
+            font-size: 1em;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: 'Segoe UI', sans-serif;
+            transition: background 0.3s, transform 0.2s;
+            z-index: 4;
+        }
+        .back:hover { background: #fff; transform: translateY(-2px); }
+        .kitty-guest {
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            width: 96px;
+            z-index: 20;
+            pointer-events: none;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.2));
+            animation: kitty-float 3.2s ease-in-out infinite;
+        }
+        @keyframes kitty-float {
+            0%, 100% { transform: translateY(0) rotate(-4deg); }
+            50% { transform: translateY(-9px) rotate(4deg); }
+        }
+    </style>
+</head>
+<body>
+    <img src="images/hello-kitty-hola.png" alt="Hello Kitty saludando" class="kitty-guest">
+    <header class="header">
+        <h1>🎀 Mucho estilo</h1>
+        <p>Sofía, hay mujeres que simplemente se visten, y luego estás tú, que conviertes cada paso en una lección de clase, elegancia y presencia indiscutible</p>
+    </header>
+    <div class="heart">💗</div>
+    <a class="back" href="index.html?vista=carta">⬅ Volver a la sorpresa</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bows = ['🎀', '🎀', '👛', '💄', '👠', '🕶️', '💅', '👗'];
+            bows.forEach((b, i) => {
+                const el = document.createElement('div');
+                el.className = 'bow';
+                el.textContent = b;
+                el.style.left = (5 + Math.random() * 85) + 'vw';
+                el.style.top = (5 + Math.random() * 55) + 'vh';
+                el.style.fontSize = (1.6 + Math.random() * 2.4) + 'em';
+                el.style.animationDelay = (Math.random() * 3) + 's';
+                el.style.animationDuration = (2.8 + Math.random() * 2) + 's';
+                document.body.appendChild(el);
+            });
+            for (let i = 0; i < 12; i++) {
+                const s = document.createElement('span');
+                s.className = 'sparkle';
+                s.textContent = '✦';
+                s.style.left = (Math.random() * 100) + 'vw';
+                s.style.top = (Math.random() * 100) + 'vh';
+                s.style.animationDelay = (Math.random() * 2) + 's';
+                document.body.appendChild(s);
+            }
+        });
+    </script>
+</body>
+</html>

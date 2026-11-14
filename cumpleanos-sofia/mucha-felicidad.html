@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦋 Mucha felicidad</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #aee3ff 0%, #d9f4ff 45%, #7ecb5e 45.1%, #4f9c47 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .header { text-align: center; padding: 8vh 20px; z-index: 3; }
+        .header h1 { font-size: 3em; color: #2e7d32; text-shadow: 2px 2px 0 #d9f4ff; }
+        .header p { margin-top: 12px; font-size: 1.3em; color: #1b5e20; }
+        .flowers-row { position: fixed; bottom: 0; left: 0; right: 0; z-index: 1; font-size: 2em; }
+        .butterfly {
+            position: fixed;
+            width: 60px; height: 52px;
+            z-index: 2;
+            cursor: pointer;
+        }
+        .butterfly .flyer {
+            position: absolute; inset: 0;
+            animation: fly var(--fly-dur, 18s) ease-in-out var(--fly-delay, 0s) infinite;
+            perspective: 600px;
+            transform-style: preserve-3d;
+        }
+        .butterfly .wings {
+            position: absolute; inset: 0;
+            animation: flap 0.45s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+        .butterfly.fluttering .wings {
+            animation-duration: 0.13s;
+        }
+        @keyframes flap {
+            0%, 100% { transform: rotateY(-20deg) rotate(2deg); }
+            50% { transform: rotateY(68deg) rotate(-2deg); }
+        }
+        @keyframes fly {
+            0%   { transform: translate(0, 0) rotate(10deg); }
+            25%  { transform: translate(6vw, -12vh) rotate(-8deg); }
+            50%  { transform: translate(-4vw, -20vh) rotate(12deg); }
+            75%  { transform: translate(8vw, -8vh) rotate(-10deg); }
+            100% { transform: translate(0, 0) rotate(10deg); }
+        }
+        .burst {
+            position: fixed;
+            font-size: 1.3em;
+            pointer-events: none;
+            z-index: 6;
+            animation: burst 0.9s ease-out forwards;
+        }
+        @keyframes burst {
+            0% { transform: translate(0, 0) scale(0.6); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(1.5); opacity: 0; }
+        }
+        .wing {
+            position: absolute;
+            top: 8px;
+            background: var(--c);
+            border: 2px solid #333;
+            box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.35);
+        }
+        .wing.big { width: 30px; height: 36px; border-radius: 60% 40% 55% 45%; }
+        .wing.small { width: 20px; height: 24px; border-radius: 45% 55% 50% 50%; }
+        .wing.l { left: 0; }
+        .wing.r { right: 0; transform: scaleX(-1); }
+        .wing.big.l { top: 4px; }
+        .wing.big.r { top: 4px; }
+        .wing.small.l { bottom: 0; }
+        .wing.small.r { bottom: 0; }
+        .butterfly .body {
+            position: absolute;
+            top: 14px; left: 50%;
+            transform: translateX(-50%);
+            width: 10px; height: 34px;
+            background: #2c2c2c;
+            border-radius: 6px;
+            z-index: 3;
+        }
+        .butterfly .antenna {
+            position: absolute;
+            top: 4px;
+            width: 2px; height: 14px;
+            background: #2c2c2c;
+        }
+        .butterfly .antenna.a { left: 23px; transform: rotate(-25deg); }
+        .butterfly .antenna.b { right: 23px; transform: rotate(25deg); }
+        .back {
+            margin: auto auto 25px;
+            background: rgba(255, 255, 255, 0.85);
+            color: #2e7d32;
+            border: 1px solid rgba(46, 125, 50, 0.4);
+            padding: 14px 32px;
+            font-size: 1em;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s;
+            z-index: 3;
+        }
+        .back:hover { background: #fff; transform: translateY(-2px); }
+        .score {
+            margin-top: 14px;
+            background: rgba(255, 255, 255, 0.85);
+            color: #2e7d32;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-size: 1.15em;
+            font-weight: bold;
+            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.2);
+            display: inline-block;
+        }
+        .score span { color: #e91e63; }
+        .floating-score {
+            position: fixed;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #fff;
+            pointer-events: none;
+            z-index: 7;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+            animation: floatUp 1s ease-out forwards;
+        }
+        @keyframes floatUp {
+            0% { transform: translate(-50%, 0) scale(0.7); opacity: 1; }
+            100% { transform: translate(-50%, -70px) scale(1.3); opacity: 0; }
+        }
+        .milestone {
+            position: fixed;
+            left: 50%; top: 45%;
+            transform: translate(-50%, -50%);
+            font-size: 1.9em;
+            color: #fff;
+            background: rgba(233, 30, 99, 0.92);
+            padding: 18px 36px;
+            border-radius: 22px;
+            z-index: 8;
+            text-align: center;
+            box-shadow: 0 12px 45px rgba(0, 0, 0, 0.35);
+            animation: milestoneIn 2.4s ease-out forwards;
+        }
+        @keyframes milestoneIn {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            12% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+            20% { transform: translate(-50%, -50%) scale(1); }
+            82% { opacity: 1; }
+            100% { opacity: 0; transform: translate(-50%, -50%) translateY(-30px); }
+        }
+        .kitty-guest {
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            width: 96px;
+            z-index: 20;
+            pointer-events: none;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.2));
+            animation: kitty-float 3.2s ease-in-out infinite;
+        }
+        @keyframes kitty-float {
+            0%, 100% { transform: translateY(0) rotate(-4deg); }
+            50% { transform: translateY(-9px) rotate(4deg); }
+        }
+    </style>
+</head>
+<body>
+    <img src="images/hello-kitty-hola.png" alt="Hello Kitty saludando" class="kitty-guest">
+    <header class="header">
+        <h1>🦋 Mucha felicidad</h1>
+        <p>Mariposas de colores para alegrarte sofia :*</p>
+        <div class="score">🦋 Felicidad atrapada: <span id="score-count">0</span> 💛</div>
+    </header>
+    <div class="flowers-row">🌼🌷🌸🌷🌼🌸🌷🌼🌸🌷🌼</div>
+    <a class="back" href="index.html?vista=carta">⬅ Volver a la sorpresa</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const colors = ['#e91e63', '#ff9800', '#9c27b0', '#03a9f4', '#4caf50', '#f44336', '#ffeb3b', '#e91e63', '#3f51b5', '#ff5722'];
+            let happiness = 0;
+            const scoreCount = document.getElementById('score-count');
+
+            function popupAt(elm, text) {
+                const r = elm.getBoundingClientRect();
+                const p = document.createElement('div');
+                p.className = 'floating-score';
+                p.textContent = text;
+                p.style.left = (r.left + r.width / 2) + 'px';
+                p.style.top = (r.top + 10) + 'px';
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 1000);
+            }
+
+            function milestone(text) {
+                const m = document.createElement('div');
+                m.className = 'milestone';
+                m.innerHTML = text;
+                document.body.appendChild(m);
+                setTimeout(() => m.remove(), 2500);
+            }
+
+            function catchButterfly(b) {
+                b.classList.add('fluttering');
+                burst(b);
+                happiness++;
+                scoreCount.textContent = happiness;
+                popupAt(b, '+1 💛');
+                if (happiness === 5) milestone(' ¡5 de felicidad!<br>vas genial 💛');
+                if (happiness === 10) milestone(' ¡10 de felicidad!<br>eres imparable 🎉');
+                if (happiness === 20) milestone(' ¡20 de felicidad!<br>RÉCORD de alegría 💖');
+                setTimeout(() => b.classList.remove('fluttering'), 1400);
+            }
+
+            for (let i = 0; i < 12; i++) {
+                const b = document.createElement('div');
+                b.className = 'butterfly';
+                const c = colors[Math.floor(Math.random() * colors.length)];
+                b.style.setProperty('--c', c);
+                b.style.left = (Math.random() * 100) + 'vw';
+                b.style.top = (20 + Math.random() * 60) + 'vh';
+                b.style.setProperty('--fly-dur', (12 + Math.random() * 14) + 's');
+                b.style.setProperty('--fly-delay', (Math.random() * 4) + 's');
+                b.innerHTML =
+                    '<div class="flyer">' +
+                    '<div class="wings">' +
+                    '<div class="wing big l"></div><div class="wing big r"></div>' +
+                    '<div class="wing small l"></div><div class="wing small r"></div>' +
+                    '</div>' +
+                    '<div class="antenna a"></div><div class="antenna b"></div>' +
+                    '<div class="body"></div>' +
+                    '</div>';
+                b.addEventListener('click', function() {
+                    catchButterfly(b);
+                });
+                document.body.appendChild(b);
+            }
+            function burst(elm) {
+                const r = elm.getBoundingClientRect();
+                const cx = r.left + r.width / 2;
+                const cy = r.top + r.height / 2;
+                const marks = ['✨', '💖', '💛', '🌸', '💖'];
+                for (let i = 0; i < 8; i++) {
+                    const s = document.createElement('span');
+                    const ang = (Math.PI * 2 / 8) * i + Math.random() * 0.6;
+                    const dist = 45 + Math.random() * 40;
+                    s.className = 'burst';
+                    s.textContent = marks[i % marks.length];
+                    s.style.left = cx + 'px';
+                    s.style.top = cy + 'px';
+                    s.style.setProperty('--dx', (Math.cos(ang) * dist) + 'px');
+                    s.style.setProperty('--dy', (Math.sin(ang) * dist) + 'px');
+                    document.body.appendChild(s);
+                    setTimeout(() => s.remove(), 1000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
